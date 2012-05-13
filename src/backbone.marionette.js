@@ -225,9 +225,9 @@ Backbone.Marionette = (function(Backbone, _, $){
     },
 
     // Handle a child item added to the collection
-    addChildView: function(item){
+    addChildView: function(item, collection, options){
       var ItemView = this.getItemView();
-      return this.addItemView(item, ItemView);
+      return this.addItemView(item, ItemView, options.index);
     },
 
     // Loop through all of the items and render 
@@ -244,8 +244,8 @@ Backbone.Marionette = (function(Backbone, _, $){
       this.closeChildren();
 
       if (this.collection) {
-        this.collection.each(function(item){
-          var promise = that.addItemView(item, ItemView);
+        this.collection.each(function(item, index){
+          var promise = that.addItemView(item, ItemView, index);
           promises.push(promise);
         });
       }
@@ -279,7 +279,7 @@ Backbone.Marionette = (function(Backbone, _, $){
 
     // Render the child item's view and add it to the
     // HTML for the collection view.
-    addItemView: function(item, ItemView){
+    addItemView: function(item, ItemView, index){
       var that = this;
 
       var view = this.buildItemView(item, ItemView);
@@ -296,11 +296,11 @@ Backbone.Marionette = (function(Backbone, _, $){
       });
 
       this.storeChild(view);
-      this.trigger("item:added", view);
+      this.trigger("item:added", view, index);
 
       var viewRendered = view.render();
       $.when(viewRendered).then(function(){
-        that.appendHtml(that, view);
+        that.appendHtml(that, view, index);
       });
       
       return viewRendered;
