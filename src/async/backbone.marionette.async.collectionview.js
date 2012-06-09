@@ -60,6 +60,9 @@ Marionette.Async.CollectionView = {
 
     var viewRendered = view.render();
     $.when(viewRendered).then(function(){
+    if (view.isClosed && view.isClosed()) {
+        return;
+      }
       that.appendHtml(that, view, index);
     });
 
