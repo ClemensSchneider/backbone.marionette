@@ -17,11 +17,11 @@ Marionette.Async.CollectionView = {
 
     if (this.collection) {
       if (this.collection.length === 0 && EmptyView) {
-        var promise = this.addItemView(new Backbone.Model(), EmptyView);
+        var promise = this.addItemView(new Backbone.Model(), EmptyView, 0);
         promises.push(promise);
       } else {
-        this.collection.each(function(item){
-          var promise = that.addItemView(item, ItemView);
+        this.collection.each(function(item, index){
+          var promise = that.addItemView(item, ItemView, index);
           promises.push(promise);
         });
       }
@@ -39,7 +39,7 @@ Marionette.Async.CollectionView = {
     return deferredRender.promise();
   },
 
-  addItemView: function(item, ItemView){
+  addItemView: function(item, ItemView, index){
     var that = this;
 
     var view = this.buildItemView(item, ItemView);
@@ -56,11 +56,11 @@ Marionette.Async.CollectionView = {
     });
 
     this.storeChild(view);
-    this.trigger("item:added", view);
+    this.trigger("item:added", view, index);
 
     var viewRendered = view.render();
     $.when(viewRendered).then(function(){
-      that.appendHtml(that, view);
+      that.appendHtml(that, view, index);
     });
 
     return viewRendered;

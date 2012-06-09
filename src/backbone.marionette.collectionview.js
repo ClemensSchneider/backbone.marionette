@@ -21,9 +21,9 @@ Marionette.CollectionView = Marionette.View.extend({
   },
 
   // Handle a child item added to the collection
-  addChildView: function(item){
+  addChildView: function(item, collection, options){
     var ItemView = this.getItemView();
-    return this.addItemView(item, ItemView);
+    return this.addItemView(item, ItemView, options.index);
   },
 
   // Loop through all of the items and render 
@@ -42,8 +42,8 @@ Marionette.CollectionView = Marionette.View.extend({
       if (this.collection.length === 0 && EmptyView) {
         this.addItemView(new Backbone.Model(), EmptyView);
       } else {
-        this.collection.each(function(item){
-          that.addItemView(item, ItemView);
+        this.collection.each(function(item, index){
+          that.addItemView(item, ItemView, index);
         });
       }
     }
@@ -69,7 +69,7 @@ Marionette.CollectionView = Marionette.View.extend({
 
   // Render the child item's view and add it to the
   // HTML for the collection view.
-  addItemView: function(item, ItemView){
+  addItemView: function(item, ItemView, index){
     var that = this;
 
     var view = this.buildItemView(item, ItemView);
@@ -88,9 +88,9 @@ Marionette.CollectionView = Marionette.View.extend({
     this.storeChild(view);
 
     view.render();
-    this.appendHtml(this, view);
+    this.appendHtml(this, view, index);
 
-    this.trigger("item:added", view);
+    this.trigger("item:added", view, index);
   },
 
   // Build an `itemView` for every model in the collection. 
@@ -114,7 +114,7 @@ Marionette.CollectionView = Marionette.View.extend({
   // Append the HTML to the collection's `el`.
   // Override this method to do something other
   // then `.append`.
-  appendHtml: function(collectionView, itemView){
+  appendHtml: function(collectionView, itemView, index){
     collectionView.$el.append(itemView.el);
   },
 
