@@ -9,7 +9,18 @@ describe("collection view", function(){
     tagName: "span",
     render: function(){
       this.$el.html(this.model.get("foo"));
-    }
+    },
+    onRender: function(){}
+  });
+
+  var CollectionView = Backbone.Marionette.CollectionView.extend({
+    itemView: ItemView,
+
+    beforeRender: function(){},
+
+    onRender: function(){},
+
+    onItemAdded: function(view){}
   });
 
   var EmptyView = Backbone.Marionette.ItemView.extend({
@@ -18,14 +29,6 @@ describe("collection view", function(){
     render: function(){}
   });
 
-  var CollectionView = Backbone.Marionette.CollectionView.extend({
-    itemView: ItemView,
-
-    beforeRender: function(){},
-
-    onRender: function(){}
-  });
-  
   var EventedView = Backbone.Marionette.CollectionView.extend({
     itemView: ItemView,
 
@@ -49,10 +52,10 @@ describe("collection view", function(){
     emptyView: EmptyView
   });
 
-  var NoItemView = Backbone.Marionette.CollectionView.extend({
-  });
-
   describe("when rendering a collection view with no `itemView` specified", function(){
+    var NoItemView = Backbone.Marionette.CollectionView.extend({
+    });
+
     var collectionView;
 
     beforeEach(function(){
@@ -78,6 +81,7 @@ describe("collection view", function(){
       });
 
       spyOn(collectionView, "onRender").andCallThrough();
+      spyOn(collectionView, "onItemAdded").andCallThrough();
       spyOn(collectionView, "beforeRender").andCallThrough();
       spyOn(collectionView, "trigger").andCallThrough();
 
@@ -106,6 +110,18 @@ describe("collection view", function(){
 
     it("should trigger a 'rendered' event", function(){
       expect(collectionView.trigger).toHaveBeenCalledWith("collection:rendered", collectionView);
+    });
+
+    it("should call `onItemAdded` for each itemView instance", function(){
+      var views = _.values(collectionView.children);
+      var v1 = views[0];
+      var v2 = views[1];
+      expect(collectionView.onItemAdded).toHaveBeenCalledWith(v1);
+      expect(collectionView.onItemAdded).toHaveBeenCalledWith(v2);
+    });
+
+    it("should call `onItemAdded` for all itemView instances", function(){
+      expect(collectionView.onItemAdded.callCount).toBe(2);
     });
   });
 
@@ -196,6 +212,8 @@ describe("collection view", function(){
     var model;
 
     beforeEach(function(){
+      spyOn(ItemView.prototype, "onRender");
+
       collection = new Collection();
       collectionView = new CollectionView({
         itemView: ItemView,
@@ -426,7 +444,7 @@ describe("collection view", function(){
     });
   });
 
-  describe("when the collection of a collection view is resetted", function(){
+  describe("when the collection of a collection view is reset", function(){
     var model;
     var collection;
     var collectionView;
@@ -455,6 +473,47 @@ describe("collection view", function(){
       expect(_.any(collectionView.bindings, function(binding) {
         return binding.obj === childView;
       })).toBe(false);
+    });
+  });
+
+  describe("when a child view is added to a collection view, after the collection view has been shown", function(){
+    var m1, m2, col, view, viewOnShowContext;
+
+    var ItemView = Backbone.Marionette.ItemView.extend({
+      onShow: function(){ viewOnShowContext = this; },
+      onRender: function(){},
+      render: function(){}
+    });
+
+    var ColView = Backbone.Marionette.CollectionView.extend({
+      itemView: ItemView,
+      onShow: function(){}
+    });
+
+    beforeEach(function(){
+      spyOn(ItemView.prototype, "onShow").andCallThrough();
+
+      m1 = new Model();
+      m2 = new Model();
+      col = new Collection([m1]);
+      var colView = new ColView({
+        collection: col
+      });
+
+      colView.render();
+      colView.onShow();
+      colView.trigger("show");
+
+      col.add(m2);
+      view = colView.children[m2.cid];
+    });
+
+    it("should call the 'onShow' method of the child view", function(){
+      expect(ItemView.prototype.onShow).toHaveBeenCalled();
+    });
+
+    it("should call the child's 'onShow' method with itself as the context", function(){
+      expect(viewOnShowContext).toBe(view);
     });
   });
 });

@@ -7,6 +7,7 @@ Marionette.CollectionView = Marionette.View.extend({
   constructor: function(){
     Marionette.View.prototype.constructor.apply(this, arguments);
     this.initialEvents();
+    this.onShowCallbacks = new Marionette.Callbacks();
   },
 
   // Configured the initial events that the collection view 
@@ -24,6 +25,12 @@ Marionette.CollectionView = Marionette.View.extend({
   addChildView: function(item, collection, options){
     var ItemView = this.getItemView();
     return this.addItemView(item, ItemView, options.index);
+  },
+
+  // Override from `Marionette.View` to guarantee the `onShow` method
+  // of child views is called.
+  onShowCalled: function(){
+    this.onShowCallbacks.run();
   },
 
   // Loop through all of the items and render 
@@ -73,26 +80,36 @@ Marionette.CollectionView = Marionette.View.extend({
     var that = this;
 
     var view = this.buildItemView(item, ItemView);
-    var childBinding = this.bindTo(view, "all", function(){
 
-      // get the args, prepend the event name
-      // with "itemview:" and insert the child view
-      // as the first event arg (after the event name)
+    // call onShow for child item views
+    if (view.onShow){
+      this.onShowCallbacks.add(view.onShow, view);
+    }
+
+    // Store the child view itself so we can properly 
+    // remove and/or close it later
+    this.storeChild(view);
+    if (this.onItemAdded){ this.onItemAdded(view); }
+    this.trigger("item:added", view, index);
+
+    // Render it and show it
+    view.render();
+    this.appendHtml(this, view, index);
+
+    // Forward all child item view events through the parent,
+    // prepending "itemview:" to the event name
+    var childBinding = this.bindTo(view, "all", function(){
       var args = slice.call(arguments);
       args[0] = "itemview:" + args[0];
       args.splice(1, 0, view);
 
       that.trigger.apply(that, args);
     });
+
+    // Store all child event bindings so we can unbind
+    // them when removing / closing the child view
     this.childBindings = this.childBindings || {};
     this.childBindings[view.cid] = childBinding;
-
-    this.storeChild(view);
-
-    view.render();
-    this.appendHtml(this, view, index);
-
-    this.trigger("item:added", view, index);
   },
 
   // Build an `itemView` for every model in the collection. 
