@@ -39,11 +39,11 @@ Marionette.Async.CollectionView = {
     return deferredRender.promise();
   },
   
-  renderItemView: function(view) {
+  renderItemView: function(view, index) {
     var that = this;
 	var viewRendered = view.render();
     $.when(viewRendered).then(function(){
-      that.appendHtml(that, view);
+      that.appendHtml(that, view, index);
     });
     return viewRendered;
   }
