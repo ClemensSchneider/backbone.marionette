@@ -1,4 +1,4 @@
-## Marionette.Async
+# Marionette.Async
 
 Add async / deferred rendering and template loading to Backbone.Marionette
 
@@ -12,7 +12,7 @@ Development: [backbone.marionette.async.js](https://raw.github.com/derickbailey/
 
 Production: [backbone.marionette.async.min.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/backbone.marionette.async.min.js)
 
-### AMD/RequireJS Support
+## AMD/RequireJS Support
 
 Note that there is no AMD/RequireJS build for Marionette.Async. 
 AMD/RequireJS are asynchronous by definition: **A**synchronous 
@@ -33,15 +33,12 @@ your project, after Marionette has been included:
 <script src="/js/backbone.marionette.async.js"></script>
 ```
 
-Once that has been included, you must call the `init` method on the 
-`Async` module. This will re-write all of the correct functions on the
-Marionette objects, to support asynchronous template loading and
-rendering.
+Once that has been included, several core functions on several of the
+Marionette objects will be overwritten with asynchronous counterparts.
 
-```js
-// configure Marionette to render asynchronously
-Backbone.Marionette.Async.init();
-```
+**Note that this is destructive change.** You cannot switch
+back and forth between sync/async objects. Once included in the page, all
+of the specified methods will run with async capabilities.
 
 ## Marionette.Async.Region
 
