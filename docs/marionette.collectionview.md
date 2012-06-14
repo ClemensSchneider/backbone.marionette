@@ -245,7 +245,7 @@ parent collection view will then trigger "itemview:do:something".
 ```js
 // set up basic collection
 var myModel = new MyModel();
-var myColelction = new MyCollection();
+var myCollection = new MyCollection();
 myCollection.add(myModel);
 
 // get the collection view in place
@@ -322,15 +322,22 @@ value.
 
 ```js
 Backbone.Marionette.CollectionView.extend({
-  appendHtml: function(collectionView, itemView){
+
+  appendHtml: function(collectionView, itemView, index){
     collectionView.$el.prepend(itemView.el);
   }
+
 });
 ```
 
 The first parameter is the instance of the collection view that 
 will receive the HTML from the second parameter, the current item
-view instance.
+view instance. 
+
+The third parameter, `index`, is the index of the
+model that this itemView instance represents, in the collection 
+that the model came from. This is useful for sorting a collection
+and displaying the sorted list in the correct order on the screen.
 
 ## CollectionView close
 

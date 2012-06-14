@@ -48,7 +48,7 @@ Marionette.CollectionView = Marionette.View.extend({
 
     if (this.collection) {
       if (this.collection.length === 0 && EmptyView) {
-        this.addItemView(new Backbone.Model(), EmptyView);
+        this.addItemView(new Backbone.Model(), EmptyView, 0);
       } else {
         this.collection.each(function(item, index){
           that.addItemView(item, ItemView, index);
