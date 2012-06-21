@@ -9,6 +9,8 @@ Async.CompositeView = {
     var that = this;
     var compositeRendered = $.Deferred();
 
+    this.resetItemViewContainer();
+
     var modelIsRendered = this.renderModel();
     $.when(modelIsRendered).then(function(html){
       that.$el.html(html);
@@ -35,6 +37,5 @@ Async.CompositeView = {
       this.trigger("composite:collection:rendered");
     });
     return collectionDeferred.promise();
-  },
-
+  }
 }

@@ -26,6 +26,10 @@ Async.ItemView = {
     }
 
     var templateRendered = function(html){
+      if (that.isClosed && that.isClosed()) {
+        deferredRender.resolve();
+        return;
+      }
       that.$el.html(html);
       callDeferredMethod(that.onRender, onRenderDone, that);
     }
