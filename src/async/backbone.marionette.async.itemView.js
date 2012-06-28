@@ -20,14 +20,18 @@ Async.ItemView = {
     } 
 
     var dataSerialized = function(data){
+      if (that.closed) {
+        deferredRender.reject();
+        return;
+      }
       var template = that.getTemplate();
       var asyncRender = Marionette.Renderer.render(template, data);
       $.when(asyncRender).then(templateRendered);
     }
 
     var templateRendered = function(html){
-      if (that.isClosed && that.isClosed()) {
-        deferredRender.resolve();
+      if (that.closed) {
+        deferredRender.reject();
         return;
       }
       that.$el.html(html);
