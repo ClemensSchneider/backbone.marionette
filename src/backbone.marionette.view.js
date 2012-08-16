@@ -109,6 +109,10 @@ Marionette.View = Backbone.View.extend({
   // for you. You can specify an `onClose` method in your view to
   // add custom code that is called after the view is closed.
   close: function(){
+    if (this._closing) {
+      return;
+    }
+    this._closing = true;
     if (this.beforeClose) { this.beforeClose(); }
 
     this.remove();
@@ -118,6 +122,7 @@ Marionette.View = Backbone.View.extend({
     this.trigger('close');
     this.unbindAll();
     this.unbind();
+    delete this._closing;
   }
 });
 
