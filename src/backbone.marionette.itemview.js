@@ -7,15 +7,9 @@
 Marionette.ItemView =  Marionette.View.extend({
   constructor: function(){
     Marionette.View.prototype.constructor.apply(this, arguments);
-    this.initialEvents();
-  },
 
-  // Configured the initial events that the item view 
-  // binds to. Override this method to prevent the initial
-  // events, or to add your own initial events.
-  initialEvents: function(){
-    if (this.collection){
-      this.bindTo(this.collection, "reset", this.render, this);
+    if (this.initialEvents){
+      this.initialEvents();
     }
   },
 
@@ -33,6 +27,7 @@ Marionette.ItemView =  Marionette.View.extend({
     var template = this.getTemplate();
     var html = Marionette.Renderer.render(template, data);
     this.$el.html(html);
+    this.bindUIElements();
 
     if (this.onRender){ this.onRender(); }
     this.trigger("render", this);

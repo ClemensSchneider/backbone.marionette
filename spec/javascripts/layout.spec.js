@@ -7,6 +7,40 @@ describe("layout", function(){
     }
   });
 
+  var CustomRegion1 = function() { 
+  };
+
+  var CustomRegion2 = function() {
+  };
+  
+  var LayoutManagerCustomRegion = LayoutManager.extend({
+    regionType: CustomRegion1,
+    regions: {
+      regionOne: {
+        selector: '#regionOne',
+        regionType: CustomRegion1
+      },
+      regionTwo: {
+        selector: '#regionTwo',
+        regionType: CustomRegion2
+      },
+      regionThree: {
+        selector: '#regionThree'
+      },
+      regionFour: '#regionFour'
+    }
+  });
+  
+  var LayoutManagerNoDefaultRegion = LayoutManager.extend({
+    regions: {
+      regionOne: {
+        selector: '#regionOne',
+        regionType: CustomRegion1
+      },
+      regionTwo: '#regionTwo'
+    } 
+  });
+
   describe("on instantiation", function(){
     var layoutManager;
 
@@ -19,6 +53,37 @@ describe("layout", function(){
       expect(layoutManager).toHaveOwnProperty("regionTwo");
     });
 
+
+  });
+
+  describe("on instantiation with custom region managers", function() {
+    var layoutManager;
+
+    beforeEach(function() {
+      layoutManager = new LayoutManagerCustomRegion 
+    });
+  
+    it("should instantiate the default regionManager if specified", function() {
+      var layoutManagerCustomRegion = new LayoutManagerCustomRegion();
+      expect(layoutManagerCustomRegion).toHaveOwnProperty("regionThree");
+      expect(layoutManagerCustomRegion.regionThree).toBeInstanceOf(CustomRegion1);
+      expect(layoutManagerCustomRegion).toHaveOwnProperty("regionThree");
+      expect(layoutManagerCustomRegion.regionThree).toBeInstanceOf(CustomRegion1);
+    });
+
+    it("should instantiate specific regions with custom regions if speficied", function() {
+      var layoutManagerCustomRegion = new LayoutManagerCustomRegion(); 
+      expect(layoutManagerCustomRegion).toHaveOwnProperty("regionOne");
+      expect(layoutManagerCustomRegion.regionOne).toBeInstanceOf(CustomRegion1);
+      expect(layoutManagerCustomRegion).toHaveOwnProperty("regionTwo");
+      expect(layoutManagerCustomRegion.regionTwo).toBeInstanceOf(CustomRegion2);
+    });
+
+    it("should instantiate marionette regions is no regionType is specified", function() {
+      var layoutManagerNoDefault = new LayoutManagerNoDefaultRegion();
+      expect(layoutManagerNoDefault).toHaveOwnProperty("regionTwo");
+      expect(layoutManagerNoDefault.regionTwo).toBeInstanceOf(Backbone.Marionette.Region);
+    });
   });
 
   describe("on rendering", function(){
@@ -110,15 +175,15 @@ describe("layout", function(){
       view.close = function(){};
       layout.regionOne.show(view);
 
-      spyOn(region, "close").andCallThrough();
+      spyOn(region, "reset").andCallThrough();
       spyOn(view, "close").andCallThrough();
 
       layout.render();
       layout.regionOne.show(view);
     });
 
-    it("should close the view from the region", function(){
-      expect(region.close.callCount).toBe(2);
+    it("should reset the regions", function(){
+      expect(region.reset.callCount).toBe(1);
     });
 
     it("should close the regions", function(){
@@ -128,6 +193,33 @@ describe("layout", function(){
     it("should re-bind the regions to the newly rendered elements", function(){
       var regionEl = layout.$("#regionOne");
       expect(region.$el[0]).toBe(regionEl[0]);
+    });
+  });
+
+  describe("when re-rendering a closed layout", function(){
+    var region, layout, view;
+
+    beforeEach(function(){
+      loadFixtures("layoutManagerTemplate.html");
+
+      layout = new LayoutManager();
+      layout.render();
+      region = layout.regionOne;
+
+      view = new Backbone.View();
+      view.close = function(){};
+      layout.regionOne.show(view);
+      layout.close();
+
+      spyOn(region, "close").andCallThrough();
+      spyOn(view, "close").andCallThrough();
+
+      layout.render();
+    });
+
+    it("should re-initialize the regions to the newly rendered elements", function(){
+      expect(layout).toHaveOwnProperty("regionOne");
+      expect(layout).toHaveOwnProperty("regionTwo");
     });
   });
 

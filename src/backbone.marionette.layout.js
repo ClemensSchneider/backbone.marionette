@@ -8,6 +8,8 @@
 // attaches `Region` instances to the specified `regions`.
 // Used for composite view management and sub-application areas.
 Marionette.Layout = Marionette.ItemView.extend({
+  regionType: Marionette.Region,
+
   constructor: function () {
     Backbone.Marionette.ItemView.apply(this, arguments);
     this.initializeRegions();
@@ -28,7 +30,7 @@ Marionette.Layout = Marionette.ItemView.extend({
 
       var result = Marionette.ItemView.prototype.render.apply(this, arguments);
       return result;
-    }
+    };
 
     return result;
   },
@@ -52,9 +54,18 @@ Marionette.Layout = Marionette.ItemView.extend({
     }
 
     var that = this;
-    _.each(this.regions, function (selector, name) {
+    _.each(this.regions, function (region, name) {
+      if (    typeof region != 'string' 
+           && typeof region.selector != 'string' ) {
+        throw new Exception('Region must be specified as a selector ' +
+                            'string or an object with selector property');
+      }
 
-      var regionManager = new Backbone.Marionette.Region({
+      selector = typeof region === 'string' ? region : region.selector;
+      var regionType = typeof region.regionType === 'undefined' 
+        ? that.regionType : region.regionType;
+      
+      var regionManager = new regionType({
         el: selector,
           getEl: function(selector){
             return that.$(selector);
@@ -70,9 +81,13 @@ Marionette.Layout = Marionette.ItemView.extend({
   // Re-initialize all of the regions by updating the `el` that
   // they point to
   reInitializeRegions: function(){
-    _.each(this.regionManagers, function(region){
-      delete region.$el;
-    });
+    if (this.regionManagers && _.size(this.regionManagers)===0){
+      this.initializeRegions();
+    } else {
+      _.each(this.regionManagers, function(region){
+        region.reset();
+      });
+    }
   },
 
   // Close all of the regions that have been opened by

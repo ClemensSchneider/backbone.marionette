@@ -10,6 +10,7 @@ Async.CollectionView = {
 
     this.triggerBeforeRender();
 
+    this.closeEmptyView();
     this.closeChildren();
     delete this._waitingForRender;
 
@@ -36,8 +37,8 @@ Async.CollectionView = {
   showCollection: function(){
     var that = this;
     var promises = [];
-    var ItemView = this.getItemView();
 
+    var ItemView = this.getItemView();
     this.collection.each(function(item, index){
       var promise = that.addItemView(item, ItemView, index);
       promises.push(promise);
@@ -52,8 +53,8 @@ Async.CollectionView = {
   showEmptyView: function(promises){
     var promise;
     var EmptyView = this.options.emptyView || this.emptyView;
-    if (EmptyView){
-      this.showingEmptyView = true;
+    if (EmptyView && !this._showingEmptyView){
+      this._showingEmptyView = true;
       var model = new Backbone.Model();
       promise = this.addItemView(model, EmptyView, 0);
     }

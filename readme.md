@@ -5,16 +5,63 @@ Make your Backbone.js apps dance with a composite application architecture!
 ## About Marionette
 
 Backbone.Marionette is a composite application library for Backbone.js that
-aims to simplify the construction of large scale JavaScript applications. It is
-a collection of common design and implementation patterns found in 
-the applications that I (Derick Bailey) have been building with Backbone, and
-includes various pieces inspired by composite application architectures, 
+aims to simplify the construction of large scale JavaScript applications. 
+It is a collection of common design and implementation patterns found in 
+the applications that I (Derick Bailey) have been building with Backbone, 
+and includes various pieces inspired by composite application architectures, 
 such as Microsoft's "Prism" framework. 
 
-Backbone.Marionette is designed to be a lightweight and flexible library of 
-tools that you can use when you want to. Like Backbone.js itself, you're not 
-required to use all of Backbone.Marionette just because you want to use some 
-of it.
+### App Architecture On Backbone's Building Blocks
+
+Backbone provides a great set of building blocks for our JavaScript
+applications. It gives us the core constructs that are needed to build
+small apps, organize jQuery DOM events, or create single page apps that
+support mobile devices and large scale enterprise needs. But Backbone is
+not a complete framework. It's a set of building blocks. It leaves
+much of the application design, architecture and scalability to the 
+developer, including memory management, view management, and more.
+
+Marionette brings an application architecture to Backbone, along with
+built in view management and memory management. It's designed to be a 
+lightweight and flexible library of tools that sits on top of Backbone, 
+providing a framework for building scalable application.
+
+Like Backbone itself, you're not required to use all of Marionette just 
+because you want to use some of it. You can pick and choose which features 
+you want to use, when. This allows you to work with other Backbone 
+frameworks and plugins very easily. It also means that you are not required
+to engage in an all-or-nothing migration to begin using Marionette.
+
+### Key Benefits
+
+* Scale applications out with modular, event driven architecture
+* Sensible defaults, such as using Underscore templates for view rendering
+* Easy to modify to make it work with your applicaton's specific needs
+* Reduce boilerplate for views, with specialized view types
+* Build on a modular architecture with an `Application` and modules that attach to it
+* Compose your application's visuals at runtime, with `Region` and `Layout`
+* Nested views and layouts within visual regions
+* Built-in memory management and zombie killing in views, regions and layouts
+* Built-in event clean up with the `EventBinder`
+* Event-driven architecture with the `EventAggregator`
+* Flexible, "as-needed" architecture allowing you to pick and choose what you need
+* And much, much more
+
+## Donations
+
+Marionette needs your support, but not everyone can offer assitance 
+with code, bug submissions, and answering questions. If you're using 
+Marionette and you're finding that it is saving you as much time and 
+effort as I believe it does, then please consider financial support 
+for the project. 
+
+### Donate via PayPal 
+
+[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7SJHYWJ487SF4)
+
+### Donate via GitTip
+
+[GitTip](https://www.gittip.com/derickbailey)
 
 ## Source Code And Downloads
 
@@ -54,16 +101,6 @@ and are not part of the core Backbone.Marionette code.
 
 ##### [Available Packages](https://github.com/derickbailey/backbone.marionette/wiki/Available-packages)
 
-## Donations
-
-Marionette needs your support, but not everyone can offer assitance 
-with code, bug submissions, and answering questions. If you're using 
-Marionette and you're finding that it is saving you as much time and 
-effort as I believe it does, then please consider financial support 
-for the project. 
-
-[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7SJHYWJ487SF4)
-
 ## Documentation
 
 The primary documentation is split up in to multiple files, due to the size
@@ -77,7 +114,7 @@ These are the strings that you can pull to make your puppet dance:
 
 * [**Backbone.Marionette.Application**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.application.md): An application object that starts your app via initializers, and more
 * [**Backbone.Marionette.Application.module**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.application.module.md): Create modules and sub-modules within the application
-* [**Backbone.Marionette.AppRouter**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.approuter.md): Reduce your routers to nothing more then configuration
+* [**Backbone.Marionette.AppRouter**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.approuter.md): Reduce your routers to nothing more than configuration
 * [**Backbone.Marionette.View**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.view.md): The base View type that other Marionette views extend from (not intended to be used directly)
 * [**Backbone.Marionette.ItemView**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.itemview.md): A view that renders a single item
 * [**Backbone.Marionette.CollectionView**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.collectionview.md): A view that iterates over a collection, and renders individual `ItemView` instances for each model
@@ -85,7 +122,7 @@ These are the strings that you can pull to make your puppet dance:
 * [**Backbone.Marionette.Region**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.region.md): Manage visual regions of your application, including display and removal of content
 * [**Backbone.Marionette.Layout**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.layout.md): A view that renders a layout and creates region managers to manage areas within it
 * [**Backbone.Marionette.EventAggregator**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.eventaggregator.md): An extension of Backbone.Events, to be used as an event-driven or pub-sub tool
-* [**Backbone.Marionette.BindTo**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.bindto.md): An event binding manager, to facilitate binding and unbinding of events
+* [**Backbone.Marionette.EventBinder**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.eventbinder.md): An event binding manager, to facilitate binding and unbinding of events
 * [**Backbone.Marionette.Renderer**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.renderer.md): Render templates with or without data, in a consistent and common manner
 * [**Backbone.Marionette.TemplateCache**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.templatecache.md): Cache templates that are stored in `<script>` blocks, for faster subsequent access
 * [**Backbone.Marionette.Callbacks**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.callbacks.md): Manage a collection of callback methods, and execute them as needed
@@ -127,6 +164,13 @@ file.
 You can read the annotated for all the detail of how Marionette works, and advice on which methods to override when.
 
 ##### [View the annotated source code](http://derickbailey.github.com/backbone.marionette/docs/backbone.marionette.html)
+
+## How To Contribute
+
+If you would like to contribute to Marionette's source code, please read
+the [guidelines for pull requests and contributions](https://github.com/derickbailey/backbone.marionette/wiki/Guidelines-for-pull-requests-and-contributions).
+Following these guidelines will help make your contributions easier to
+bring in to the next release.
 
 ## Help Is Just A Click Away
 
@@ -189,12 +233,12 @@ than what it listed here.
 I use a number of tools to build, test and maintain Marionette, including
 but not limited to:
 
-### Anvil.js
+### Grunt
 
-The [Anvil.js](https://github.com/arobson/anvil.js) project is used
+The [Grunt](https://github.com/cowboy/grunt) project is used
 to generate the builds for Backbone.Marionette. You can run the
-`build.sh` file from a terminal, or the `build.cmd` file for Windows 
-users, after installing anvil.
+`build` file from a Linux/OSX terminal, or the `build.cmd` file for Windows 
+users, after installing grunt with NPM / NodeJS.
 
 ### Test Suite
 

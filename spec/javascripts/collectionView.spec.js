@@ -1,10 +1,8 @@
 describe("collection view", function(){
-  var Model = Backbone.Model.extend({});
 
-  var Collection = Backbone.Collection.extend({
-    model: Model
-  });
-
+  // Shared View Definitions
+  // -----------------------
+  
   var ItemView = Backbone.Marionette.ItemView.extend({
     tagName: "span",
     render: function(){
@@ -23,24 +21,9 @@ describe("collection view", function(){
     onItemAdded: function(view, index){}
   });
 
-  var EventedView = Backbone.Marionette.CollectionView.extend({
-    itemView: ItemView,
-
-    someCallback: function(){ },
-
-    beforeClose: function(){},
-
-    onClose: function(){ }
-  });
+  // Collection View Specs
+  // ---------------------
   
-  var PrependHtmlView = Backbone.Marionette.CollectionView.extend({
-    itemView: ItemView,
-
-    appendHtml: function(collectionView, itemView){
-      collectionView.$el.prepend(itemView.el);
-    }
-  });
-
   describe("when rendering a collection view with no `itemView` specified", function(){
     var NoItemView = Backbone.Marionette.CollectionView.extend({
     });
@@ -48,7 +31,7 @@ describe("collection view", function(){
     var collectionView;
 
     beforeEach(function(){
-      var collection = new Collection([{foo: "bar"}, {foo: "baz"}]);
+      var collection = new Backbone.Collection([{foo: "bar"}, {foo: "baz"}]);
       collectionView = new NoItemView({
         collection: collection
       });
@@ -60,7 +43,7 @@ describe("collection view", function(){
   });
   
   describe("when rendering a collection view", function(){
-    var collection = new Collection([{foo: "bar"}, {foo: "baz"}]);
+    var collection = new Backbone.Collection([{foo: "bar"}, {foo: "baz"}]);
     var collectionView;
 
     beforeEach(function(){
@@ -134,7 +117,7 @@ describe("collection view", function(){
       }
     });
 
-    var collection = new Collection([{foo: "bar"}]);
+    var collection = new Backbone.Collection([{foo: "bar"}]);
     var collectionView, view;
 
     beforeEach(function(){
@@ -161,7 +144,7 @@ describe("collection view", function(){
       }
     });
 
-    var collection = new Collection([{foo: "bar"}]);
+    var collection = new Backbone.Collection([{foo: "bar"}]);
     var collectionView, view;
 
     beforeEach(function(){
@@ -214,13 +197,12 @@ describe("collection view", function(){
       emptyView: EmptyView
     });
 
-
     describe("when rendering a collection view with an empty collection", function(){
 
       var collectionView;
 
       beforeEach(function(){
-        var collection = new Collection();
+        var collection = new Backbone.Collection();
         collectionView = new EmptyCollectionView({
           collection: collection
         });
@@ -241,7 +223,7 @@ describe("collection view", function(){
       var collectionView, closeSpy;
 
       beforeEach(function(){
-        var collection = new Collection();
+        var collection = new Backbone.Collection();
         collectionView = new EmptyCollectionView({
           collection: collection
         });
@@ -262,11 +244,39 @@ describe("collection view", function(){
       });
     });
 
+    describe("when the emptyView has been rendered for an empty collection and then collection reset, recieving some values. Then adding an item to the collection", function () {
+      var collectionView, closeSpy;
+
+      beforeEach(function () {
+        var collection = new Backbone.Collection();
+        collectionView = new EmptyCollectionView({
+          collection: collection
+        });
+
+        collectionView.render();
+
+        closeSpy = spyOn(EmptyView.prototype, "close");
+        closeSpy.andCallThrough();
+
+        collection.reset([{ foo: "bar" }, { foo: "baz"}]);
+
+        collection.add({ foo: "wut" });
+      });
+
+      it("should close the emptyView", function () {
+        expect(closeSpy).toHaveBeenCalled();
+      });
+
+      it("should show all three items without empty view", function () {
+        expect($(collectionView.$el)).toHaveHtml("<span>bar</span><span>baz</span><span>wut</span>");
+      });
+    });
+
     describe("when the last item is removed from a collection", function(){
       var collectionView, closeSpy;
 
       beforeEach(function(){
-        var collection = new Collection([{foo: "wut"}]);
+        var collection = new Backbone.Collection([{foo: "wut"}]);
 
         collectionView = new EmptyCollectionView({
           collection: collection
@@ -293,7 +303,7 @@ describe("collection view", function(){
     var collectionView;
 
     beforeEach(function(){
-      collection = new Collection();
+      collection = new Backbone.Collection();
 
       collectionView = new CollectionView({
         collection: collection
@@ -332,7 +342,7 @@ describe("collection view", function(){
     beforeEach(function(){
       spyOn(ItemView.prototype, "onRender");
 
-      collection = new Collection();
+      collection = new Backbone.Collection();
       collectionView = new CollectionView({
         itemView: ItemView,
         collection: collection
@@ -341,7 +351,7 @@ describe("collection view", function(){
 
       spyOn(collectionView, "appendHtml").andCallThrough();
 
-      model = new Model({foo: "bar"});
+      model = new Backbone.Model({foo: "bar"});
       collection.add(model);
     });
 
@@ -359,6 +369,46 @@ describe("collection view", function(){
 
   });
 
+  describe("when providing a custom render that adds children, without a collection object to use, and removing a child", function(){
+    var collectionView;
+    var childView;
+
+    var model = new Backbone.Model({foo: "bar"});
+
+    var EmptyView = Backbone.Marionette.ItemView.extend({
+      render: function(){}
+    });
+
+    var CollectionView = Backbone.Marionette.CollectionView.extend({
+      itemView: ItemView,
+      emptyView: EmptyView,
+
+      render: function(){
+        var ItemView = this.getItemView();
+        this.addItemView(model, ItemView, 0);
+      }
+    });
+
+    beforeEach(function(){
+      collectionView = new CollectionView({});
+      collectionView.render();
+
+      childView = collectionView.children[model.cid];
+      spyOn(childView, "close").andCallThrough();
+      spyOn(EmptyView.prototype, "render");
+
+      collectionView.removeItemView(model);
+    });
+
+    it("should close the model's view", function(){
+      expect(childView.close).toHaveBeenCalled();
+    });
+
+    it("should show the empty view", function(){
+      expect(EmptyView.prototype.render.callCount).toBe(1);
+    });
+  });
+
   describe("when a model is removed from the collection", function(){
     var collectionView;
     var collection;
@@ -366,8 +416,8 @@ describe("collection view", function(){
     var model;
 
     beforeEach(function(){
-      model = new Model({foo: "bar"});
-      collection = new Collection();
+      model = new Backbone.Model({foo: "bar"});
+      collection = new Backbone.Collection();
       collection.add(model);
 
       collectionView = new CollectionView({
@@ -392,6 +442,16 @@ describe("collection view", function(){
   });
 
   describe("when closing a collection view", function(){
+    var EventedView = Backbone.Marionette.CollectionView.extend({
+      itemView: ItemView,
+
+      someCallback: function(){ },
+
+      beforeClose: function(){},
+
+      onClose: function(){ }
+    });
+  
     var collectionView;
     var collection;
     var childView;
@@ -399,7 +459,7 @@ describe("collection view", function(){
 
     beforeEach(function(){
 
-      collection = new Collection([{foo: "bar"}, {foo: "baz"}]);
+      collection = new Backbone.Collection([{foo: "bar"}, {foo: "baz"}]);
       collectionView = new EventedView({
         template: "#itemTemplate",
         collection: collection
@@ -455,7 +515,7 @@ describe("collection view", function(){
     });
 
     it("should not retain any bindings to its children", function(){
-      expect(_.size(collectionView.bindings)).toBe(0);
+      expect(_.size(collectionView._eventBindings)).toBe(0);
     });
 
     it("should unbind any listener to custom view events", function(){
@@ -484,7 +544,15 @@ describe("collection view", function(){
   });
 
   describe("when override appendHtml", function(){
-    var collection = new Collection([{foo: "bar"}, {foo: "baz"}]);
+    var PrependHtmlView = Backbone.Marionette.CollectionView.extend({
+      itemView: ItemView,
+
+      appendHtml: function(collectionView, itemView){
+        collectionView.$el.prepend(itemView.el);
+      }
+    });
+
+    var collection = new Backbone.Collection([{foo: "bar"}, {foo: "baz"}]);
     var collectionView;
 
     beforeEach(function(){
@@ -501,15 +569,15 @@ describe("collection view", function(){
   });
 
   describe("when a child view triggers an event", function(){
-    var model = new Model({foo: "bar"});
-    var collection = new Collection([model]);
+    var model = new Backbone.Model({foo: "bar"});
+    var collection = new Backbone.Collection([model]);
     var collectionView;
     var childView;
     var triggeringView;
     var eventArgs;
 
     beforeEach(function(){
-      collectionView = new PrependHtmlView({
+      collectionView = new CollectionView({
         collection: collection
       });
 
@@ -544,10 +612,10 @@ describe("collection view", function(){
     var childView;
 
     beforeEach(function(){
-      model = new Model({foo: "bar"});
-      collection = new Collection([model]);
+      model = new Backbone.Model({foo: "bar"});
+      collection = new Backbone.Collection([model]);
 
-      collectionView = new EventedView({
+      collectionView = new CollectionView({
         template: "#itemTemplate",
         collection: collection
       });
@@ -576,10 +644,10 @@ describe("collection view", function(){
     var childView;
 
     beforeEach(function(){
-      model = new Model({foo: "bar"});
-      collection = new Collection([model]);
+      model = new Backbone.Model({foo: "bar"});
+      collection = new Backbone.Collection([model]);
 
-      collectionView = new EventedView({
+      collectionView = new CollectionView({
         template: "#itemTemplate",
         collection: collection
       });
@@ -618,9 +686,9 @@ describe("collection view", function(){
     beforeEach(function(){
       spyOn(ItemView.prototype, "onShow").andCallThrough();
 
-      m1 = new Model();
-      m2 = new Model();
-      col = new Collection([m1]);
+      m1 = new Backbone.Model();
+      m2 = new Backbone.Model();
+      col = new Backbone.Collection([m1]);
       var colView = new ColView({
         collection: col
       });
@@ -656,8 +724,8 @@ describe("collection view", function(){
     beforeEach(function(){
       spyOn(ItemView.prototype, "render").andCallThrough();
 
-      m1 = new Model();
-      col = new Collection();
+      m1 = new Backbone.Model();
+      col = new Backbone.Collection();
       new ColView({
         collection: col
       });

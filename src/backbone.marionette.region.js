@@ -6,7 +6,8 @@
 Marionette.Region = function(options){
   this.options = options || {};
 
-  _.extend(this, options);
+  var eventBinder = new Marionette.EventBinder();
+  _.extend(this, eventBinder, options);
 
   if (!this.el){
     var err = new Error("An 'el' must be specified");
@@ -27,7 +28,6 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
   // `onShow` and `close` method on your view, just after showing
   // or just before closing the view, respectively.
   show: function(view){
-    var that = this;
 
     this.ensureEl();
     this.close();
@@ -80,11 +80,17 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
   // of the region.
   attachView: function(view){
     this.currentView = view;
+  },
+
+  // Reset the region by closing any existing view and
+  // clearing out the cached `$el`. The next time a view
+  // is shown via this region, the region will re-query the
+  // DOM for the region's `el`.
+  reset: function(){
+    this.close();
+    delete this.$el;
   }
 });
 
 // Copy the `extend` function used by Backbone's classes
 Marionette.Region.extend = Backbone.View.extend;
-
-// Copy the features of `BindTo`
-_.extend(Marionette.Region.prototype, Marionette.BindTo);

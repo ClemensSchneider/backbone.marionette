@@ -168,31 +168,6 @@ describe("item view", function(){
     });
   });
 
-  describe("when an item view's collection is reset", function(){
-    var view;
-
-    beforeEach(function(){
-      var collection = new Collection();
-      view = new ItemView({
-        template: "#collectionItemTemplate",
-        collection: collection
-      });
-
-      spyOn(view, "serializeData").andCallThrough();
-
-      collection.reset([ { foo: "bar" }, { foo: "baz" } ]);
-    });
-
-    it("should serialize the collection", function(){
-      expect(view.serializeData).toHaveBeenCalled();
-    });
-
-    it("should render the template with the serialized collection", function(){
-      expect($(view.el)).toHaveText(/bar/);
-      expect($(view.el)).toHaveText(/baz/);
-    });
-  });
-
   describe("when an item view has a model and collection, and is rendered", function(){
     var view;
 
@@ -350,6 +325,61 @@ describe("item view", function(){
       it("should render the view 3 times total", function(){
         expect(spy.callCount).toBe(3);
       });
+    });
+
+  });
+
+  describe("when an item view has a ui elements hash", function() {
+    describe("accessing a ui element from the hash", function() {
+
+      var View = Backbone.Marionette.ItemView.extend({
+        template: "#item-with-checkbox",
+
+        ui: {
+          checkbox: "#chk",
+          unfoundElement: "#not_found"
+        }
+      });
+
+      var view, chk, model;
+
+      beforeEach(function() {
+        loadFixtures("itemWithCheckbox.html");
+
+        model = new Backbone.Model({
+          done: false
+        });
+
+        view = new View({
+          model: model
+        });
+
+        view.render();
+      });
+
+
+      it("should return its jQuery selector if it can be found", function(){
+        expect(view.ui.checkbox.attr("type")).toEqual("checkbox");
+      });
+
+      it("should return an empty jQuery object if it cannot be found", function() {
+        expect(view.ui.unfoundElement.length).toEqual(0);
+      });
+
+      it("should return an up-to-date selector on subsequent renders", function() {
+        // asserting state before subsequent render
+        expect(view.ui.checkbox.attr("checked")).toBeUndefined();
+
+        // setting the model "done" attribute to true will cause the "checked" attribute
+        // to be added to the checkbox element in the subsequent render.
+        view.model.set('done', true);
+        view.render();
+
+        // since the ui elements selectors are refreshed after each render then the associated selector
+        // should point to the newly rendered checkbox element that has the "checked" attribute.
+        expect(view.ui.checkbox.attr("checked")).toBeDefined();
+      });
+
     });
 
   });

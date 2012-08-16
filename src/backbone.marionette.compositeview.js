@@ -39,6 +39,9 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
 
     var html = this.renderModel();
     this.$el.html(html);
+    // the ui bindings is done here and not at the end of render since they should be
+    // available before the collection is rendered.
+    this.bindUIElements();
     this.trigger("composite:model:rendered");
     this.trigger("render");
 
@@ -82,6 +85,12 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     } else {
       if (containerView.itemViewContainer){
         container = containerView.$(_.result(containerView, "itemViewContainer"));
+
+        if (container.length <= 0) {
+          var err = new Error("Missing `itemViewContainer`");
+          err.name = "ItemViewContainerMissingError";
+          throw err;
+        }
       } else {
         container = containerView.$el;
       }

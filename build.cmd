@@ -1,1 +1,1 @@
-anvil -b build.json
+.\node_modules\.bin\grunt
