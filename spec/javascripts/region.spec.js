@@ -287,4 +287,57 @@ describe("region", function(){
       expect(Manager.prototype.initialize).toHaveBeenCalledWith(expectedOptions);
     });
   });
+
+  describe("when removing a region", function(){
+    var MyApp, region;
+
+    beforeEach(function(){
+      setFixtures("<div id='region'></div><div id='region2'></div>");
+
+      MyApp = new Backbone.Marionette.Application();
+      MyApp.addRegions({
+        MyRegion: "#region", 
+        anotherRegion: "#region2"
+      });
+
+      region = MyApp.MyRegion;
+      spyOn(region, "close");
+
+      MyApp.removeRegion('MyRegion')
+    });
+
+    it("should be removed from the app", function(){
+      expect(MyApp.MyRegion).not.toBeDefined()
+    })
+    it("should call 'close' of the region", function(){
+      expect(region.close).toHaveBeenCalled()
+    })
+  })
+
+  describe("when resetting a region", function(){
+    var region;
+
+    beforeEach(function(){
+      setFixtures("<div id='region'></div>");
+
+      region = new Backbone.Marionette.Region({
+        el: "#region"
+      });
+
+      spyOn(region, "close");
+
+      region.ensureEl();
+
+      region.reset();
+    });
+
+    it("should not hold on to the region's previous `el`", function(){
+      expect(region.$el).not.toExist();
+    });
+
+    it("should close any existing view", function(){
+      expect(region.close).toHaveBeenCalled();
+    });
+
+  });
 });

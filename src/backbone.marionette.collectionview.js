@@ -60,6 +60,7 @@ Marionette.CollectionView = Marionette.View.extend({
   // the collection view.
   render: function(){
     this.triggerBeforeRender();
+    this.closeEmptyView();
     this.closeChildren();
     delete this._waitingForRender;
 
@@ -88,8 +89,8 @@ Marionette.CollectionView = Marionette.View.extend({
   // empty
   showEmptyView: function(){
     var EmptyView = this.options.emptyView || this.emptyView;
-    if (EmptyView){
-      this.showingEmptyView = true;
+    if (EmptyView && !this._showingEmptyView){
+      this._showingEmptyView = true;
       var model = new Backbone.Model();
       this.addItemView(model, EmptyView, 0);
     }
@@ -99,9 +100,9 @@ Marionette.CollectionView = Marionette.View.extend({
   // if one exists. Called when a collection view has been
   // rendered empty, and then an item is added to the collection.
   closeEmptyView: function(){
-    if (this.showingEmptyView){
+    if (this._showingEmptyView){
       this.closeChildren();
-      delete this.showingEmptyView;
+      delete this._showingEmptyView;
     }
   },
 
@@ -186,7 +187,7 @@ Marionette.CollectionView = Marionette.View.extend({
       delete this.children[item.cid];
     }
 
-    if (this.collection.length === 0){
+    if (!this.collection || this.collection.length === 0){
       this.showEmptyView();
     }
 

@@ -1,3 +1,69 @@
+### v0.9.10 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.9...v0.9.10)
+
+* ItemView and Layout
+  * **BREAKING:** Removed the default implementation of `initialEvents`, so that a collection "reset" event won't cause the ItemView or Layout to re-render
+* Build Process
+  * Changed from Anvil.js to Grunt.js for the build process
+
+### v0.9.9 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.8...v0.9.9)
+
+* Regions
+  * Added a `reset` method to regions, which closes the open view and deletes the region's cached `el`
+
+### v0.9.8 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.7...v0.9.8)
+
+* Modules
+  * Fixed a bug that ensures modules will start and stop the correct number of times, instead of always stopping immediately after they have been stopped once
+
+### v0.9.7 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.6...v0.9.7)
+
+* Modules
+  * Fixed a bug to ensure modules are only started once, no matter how many definitions the module is split in to
+
+* View Templates
+  * Better support for pre-compiled templates - can specify a function as the `template` setting for a view, and the function will be run as the template, directly.
+
+### v0.9.6 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.5...v0.9.6)
+
+* All Marionette Views
+  * Fixed bug that prevented `bindTo` function and other `EventBinder` functions from being available in `initialize` method of views
+
+### v0.9.5 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.4...v0.9.5)
+
+* Layout
+  * Fixed a typo / bug in default Region type used for layouts
+
+### v0.9.4 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.3...v0.9.5)
+
+* BindTo -> EventBindings
+  * **BREAKING:** Renamed `Marionette.BindTo` to `Marionette.EventBindings` and made it a constructor function instead of an object literal
+
+* Modules
+  * **BREAKING:** Changed the API of `Module.create` to be more clear and explicit about `app` parameter
+  * **BREAKING:** Defer module definition until module is started
+  * Modules now have `addInitializer` method to add initializers
+  * Modules can be started (run the initializers) with `start` method
+  * Modules are automatically started when Marionette.Application `start` method is called
+  * App.start sends options to module initializers
+  * Modules that are defined (or loaded from external source) afer app is started will auto-start by default
+  * Can specify a module is not started with the app, to prevent the module from being started when app.start is called
+  * Calling `start` on a module will start all of the sub-modules for that module
+
+* CollectionView/CompositeView
+  * Correctly handles non-existent collection and removing child item views that were added manually
+  * Corrected showing empty view and closing empty view when resetting collection and adding items
+  * Fixed bug to prevent showing the empty view more than once when rendering the collection view
+
+* Application
+  * Added a `removeRegion` method to close / remove regions, as a counter-function to the `addRegions` method
+
+* Marionette.View (all views / base view)
+  * Can specify a set of `ui` elements that are cached jQuery selectors
+
+* Layout
+  * An already closed layout can be re-rendered, and the regions will regenerate
+  * Allow a custom region type to be specified for all regions, as well as per-region instance
+
 ### v0.9.3 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.2...v0.9.3)
 
 * CompositeView
@@ -20,8 +86,6 @@
 * Fixed bug in template cache for Marionette.Async
 
 * Marionette can now be installed with [Volo](https://github.com/volojs/volo)
-
-
 
 ### v0.9.1 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.0...v0.9.1)
 

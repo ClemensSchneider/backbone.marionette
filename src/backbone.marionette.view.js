@@ -4,7 +4,11 @@
 // The core view type that other Marionette views extend from.
 Marionette.View = Backbone.View.extend({
   constructor: function(){
+    var eventBinder = new Marionette.EventBinder();
+    _.extend(this, eventBinder);
+
     Backbone.View.prototype.constructor.apply(this, arguments);
+
     this.bindTo(this, "show", this.onShowCalled, this);
   },
 
@@ -81,7 +85,7 @@ Marionette.View = Backbone.View.extend({
         if (e && e.preventDefault){ e.preventDefault(); }
         if (e && e.stopPropagation){ e.stopPropagation(); }
         that.trigger(value);
-      }
+      };
 
     });
 
@@ -92,7 +96,7 @@ Marionette.View = Backbone.View.extend({
   // to handle the `triggers` configuration
   delegateEvents: function(events){
     events = events || this.events;
-    if (_.isFunction(events)){ events = events.call(this)}
+    if (_.isFunction(events)){ events = events.call(this); }
 
     var combinedEvents = {};
     var triggers = this.configureTriggers();
@@ -122,9 +126,29 @@ Marionette.View = Backbone.View.extend({
     this.trigger('close');
     this.unbindAll();
     this.unbind();
-    delete this._closing;
+	delete this._closing;
+  },
+
+  // This method binds the elements specified in the "ui" hash inside the view's code with
+  // the associated jQuery selectors.
+  bindUIElements: function(){
+    if (!this.ui) { return; }
+
+    var that = this;
+
+    if (!this.uiBindings) {
+      // We want to store the ui hash in uiBindings, since afterwards the values in the ui hash
+      // will be overridden with jQuery selectors.
+      this.uiBindings = this.ui;
+    }
+
+    // refreshing the associated selectors since they should point to the newly rendered elements.
+    this.ui = {};
+    _.each(_.keys(this.uiBindings), function(key) {
+      var selector = that.uiBindings[key];
+      that.ui[key] = that.$(selector);
+    });
   }
+
 });
 
-// Copy the features of `BindTo`
-_.extend(Marionette.View.prototype, Marionette.BindTo);

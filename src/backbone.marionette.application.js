@@ -7,7 +7,10 @@
 Marionette.Application = function(options){
   this.initCallbacks = new Marionette.Callbacks();
   this.vent = new Marionette.EventAggregator();
-  _.extend(this, options);
+  this.submodules = {};
+
+  var eventBinder = new Marionette.EventBinder();
+  _.extend(this, eventBinder, options);
 };
 
 _.extend(Marionette.Application.prototype, Backbone.Events, {
@@ -53,15 +56,25 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
     }
   },
 
+  // Removes a region from your app.
+  // Accepts the regions name
+  // removeRegion('myRegion')
+  removeRegion: function(region) {
+    this[region].close();
+    delete this[region];
+  },
+
   // Create a module, attached to the application
-  module: function(){
+  module: function(moduleNames, moduleDefinition){
+    // slice the args, and add this application object as the
+    // first argument of the array
+    var args = slice.call(arguments);
+    args.unshift(this);
+
     // see the Marionette.Module object for more information
-    return Marionette.Module.create.apply(this, arguments);
+    return Marionette.Module.create.apply(Marionette.Module, args);
   }
 });
 
 // Copy the `extend` function used by Backbone's classes
 Marionette.Application.extend = Backbone.View.extend;
-
-// Copy the features of `BindTo`
-_.extend(Marionette.Application.prototype, Marionette.BindTo);
