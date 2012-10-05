@@ -2,6 +2,9 @@
 
 Make your Backbone.js apps dance with a composite application architecture!
 
+[![Build Status](https://secure.travis-ci.org/marionettejs/backbone.marionette.png?branch=master)](http://travis-ci.org/marionettejs/backbone.marionette)
+
+
 ## About Marionette
 
 Backbone.Marionette is a composite application library for Backbone.js that
@@ -47,6 +50,93 @@ to engage in an all-or-nothing migration to begin using Marionette.
 * Flexible, "as-needed" architecture allowing you to pick and choose what you need
 * And much, much more
 
+## Source Code And Downloads
+
+You can download the raw source code from the "src" folder above, or grab one of the
+many builds from the "lib" folder. 
+
+To get the latest stable release, use these links which point to the 'master' branch's
+builds:
+
+### Standard Builds
+
+* Development: [backbone.marionette.js](https://raw.github.com/marionettejs/backbone.marionette/master/lib/backbone.marionette.js)
+
+* Production: [backbone.marionette.min.js](https://raw.github.com/marionettejs/backbone.marionette/master/lib/backbone.marionette.min.js)
+
+### RequireJS (AMD) Builds
+
+* Development: [backbone.marionette.js](https://raw.github.com/marionettejs/backbone.marionette/master/lib/amd/backbone.marionette.js)
+
+* Production: [backbone.marionette.min.js](https://raw.github.com/marionettejs/backbone.marionette/master/lib/amd/backbone.marionette.min.js)
+
+### Marionette.Async Add-on
+
+Marionette.Async has officially been removed from the core Marionette
+repository. See the [Marionette.Async repository](https://github.com/marionettejs/backbone.marionette.async)
+for downloads, documentation, and more information.
+
+### Available Packages
+
+Marionette is unofficially available from various package
+management systems, such as RubyGems, Node Package Manager,
+Nuget, etc. These packages are maintained by the community
+and are not part of the core Backbone.Marionette code.
+
+##### [Available Packages](https://github.com/marionettejs/backbone.marionette/wiki/Available-packages)
+
+## Documentation
+
+The primary documentation is split up in to multiple files, due to the size
+of the over-all documentation. You can find these files in the 
+[/docs](https://github.com/marionettejs/backbone.marionette/tree/master/docs) folder, or use the links below to get straight to the
+documentation for each peice of Marionette.
+
+### Marionette's Pieces
+
+These are the strings that you can pull to make your puppet dance:
+
+* [**Backbone.Marionette.Application**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.application.md): An application object that starts your app via initializers, and more
+* [**Backbone.Marionette.Application.module**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.application.module.md): Create modules and sub-modules within the application
+* [**Backbone.Marionette.AppRouter**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.approuter.md): Reduce your routers to nothing more than configuration
+* [**Backbone.Marionette.View**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.view.md): The base View type that other Marionette views extend from (not intended to be used directly)
+* [**Backbone.Marionette.ItemView**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.itemview.md): A view that renders a single item
+* [**Backbone.Marionette.CollectionView**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.collectionview.md): A view that iterates over a collection, and renders individual `ItemView` instances for each model
+* [**Backbone.Marionette.CompositeView**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.compositeview.md): A collection view and item view, for rendering leaf-branch/composite model hierarchies
+* [**Backbone.Marionette.Region**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.region.md): Manage visual regions of your application, including display and removal of content
+* [**Backbone.Marionette.Layout**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.layout.md): A view that renders a layout and creates region managers to manage areas within it
+* [**Backbone.Marionette.EventAggregator**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.eventaggregator.md): An extension of Backbone.Events, to be used as an event-driven or pub-sub tool
+* [**Backbone.Marionette.EventBinder**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.eventbinder.md): An event binding manager, to facilitate binding and unbinding of events
+* [**Backbone.Marionette.Renderer**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.renderer.md): Render templates with or without data, in a consistent and common manner
+* [**Backbone.Marionette.TemplateCache**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.templatecache.md): Cache templates that are stored in `<script>` blocks, for faster subsequent access
+* [**Backbone.Marionette.Callbacks**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.callbacks.md): Manage a collection of callback methods, and execute them as needed
+
+Please note that this is document is rather dry - it's meant to be a reference for
+those that just need a reference. If you're looking for an introduction and/or 
+examples on how to get started, please see [the Wiki](https://github.com/marionettejs/backbone.marionette/wiki).
+
+### The Wiki: Sample Apps, Tutorials, And Much More
+
+A wiki is an important aspect of a thriving community, as it provides
+a place for the community to contribute ideas, examples, answer
+frequently asked questions, and more. If you're looking for
+community-driven information, examples that go beyond the
+dry technical documentation, or want to contribute your own
+ideas and examples to the community, please see the wiki page.
+
+##### [View The Marionette Wiki](https://github.com/marionettejs/backbone.marionette/wiki)
+
+### Annotated Source Code
+
+In addition to this readme, I've commented the source code quite
+heavily and run it through Docco as part of my build process.
+This produces a nicely formatted, annotated source code as documenation
+file.
+
+You can read the annotated for all the detail of how Marionette works, and advice on which methods to override when.
+
+##### [View the annotated source code](http://marionettejs.github.com/backbone.marionette/docs/backbone.marionette.html)
+
 ## Donations
 
 Marionette needs your support, but not everyone can offer assitance 
@@ -63,116 +153,18 @@ for the project.
 
 [GitTip](https://www.gittip.com/derickbailey)
 
-## Source Code And Downloads
-
-You can download the raw source code from the "src" folder above, or grab one of the
-many builds from the "lib" folder. 
-
-To get the latest stable release, use these links which point to the 'master' branch's
-builds:
-
-### Standard Builds
-
-* Development: [backbone.marionette.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/backbone.marionette.js)
-
-* Production: [backbone.marionette.min.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/backbone.marionette.min.js)
-
-### RequireJS (AMD) Builds
-
-* Development: [backbone.marionette.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/amd/backbone.marionette.js)
-
-* Production: [backbone.marionette.min.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/amd/backbone.marionette.min.js)
-
-### Marionette.Async Add-on
-
-* Development: [backbone.marionette.async.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/backbone.marionette.async.js)
-
-* Production: [backbone.marionette.async.min.js](https://raw.github.com/derickbailey/backbone.marionette/master/lib/backbone.marionette.async.min.js)
-
-See the [async.md](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.async.md)
-documentation for more information.
-
-### Available Packages
-
-Marionette is unofficially available from various package
-management systems, such as RubyGems, Node Package Manager,
-Nuget, etc. These packages are maintained by the community
-and are not part of the core Backbone.Marionette code.
-
-##### [Available Packages](https://github.com/derickbailey/backbone.marionette/wiki/Available-packages)
-
-## Documentation
-
-The primary documentation is split up in to multiple files, due to the size
-of the over-all documentation. You can find these files in the 
-[/docs](https://github.com/derickbailey/backbone.marionette/tree/master/docs) folder, or use the links below to get straight to the
-documentation for each peice of Marionette.
-
-### Marionette's Pieces
-
-These are the strings that you can pull to make your puppet dance:
-
-* [**Backbone.Marionette.Application**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.application.md): An application object that starts your app via initializers, and more
-* [**Backbone.Marionette.Application.module**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.application.module.md): Create modules and sub-modules within the application
-* [**Backbone.Marionette.AppRouter**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.approuter.md): Reduce your routers to nothing more than configuration
-* [**Backbone.Marionette.View**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.view.md): The base View type that other Marionette views extend from (not intended to be used directly)
-* [**Backbone.Marionette.ItemView**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.itemview.md): A view that renders a single item
-* [**Backbone.Marionette.CollectionView**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.collectionview.md): A view that iterates over a collection, and renders individual `ItemView` instances for each model
-* [**Backbone.Marionette.CompositeView**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.compositeview.md): A collection view and item view, for rendering leaf-branch/composite model hierarchies
-* [**Backbone.Marionette.Region**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.region.md): Manage visual regions of your application, including display and removal of content
-* [**Backbone.Marionette.Layout**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.layout.md): A view that renders a layout and creates region managers to manage areas within it
-* [**Backbone.Marionette.EventAggregator**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.eventaggregator.md): An extension of Backbone.Events, to be used as an event-driven or pub-sub tool
-* [**Backbone.Marionette.EventBinder**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.eventbinder.md): An event binding manager, to facilitate binding and unbinding of events
-* [**Backbone.Marionette.Renderer**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.renderer.md): Render templates with or without data, in a consistent and common manner
-* [**Backbone.Marionette.TemplateCache**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.templatecache.md): Cache templates that are stored in `<script>` blocks, for faster subsequent access
-* [**Backbone.Marionette.Callbacks**](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.callbacks.md): Manage a collection of callback methods, and execute them as needed
-
-Please note that this is document is rather dry - it's meant to be a reference for
-those that just need a reference. If you're looking for an introduction and/or 
-examples on how to get started, please see [the Wiki](https://github.com/derickbailey/backbone.marionette/wiki).
-
-### Async / Deferred Rendering Support
-
-Support for asynchronously rendering views, loading templates, etc has been
-removed from Marionette directly due to performance problems and overhead
-incurred. To get async support in Marionette, then, you need to download and
-include the the `backbone.marionette.async.js` or `async.min` file in 
-your project. See the above download links and the the 
-[async.md](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.async.md)
-documentation for more information.
-
-##### [View The Async Documentation](https://github.com/derickbailey/backbone.marionette/blob/master/docs/marionette.async.md)
-
-### The Wiki: Sample Apps, Tutorials, And Much More
-
-A wiki is an important aspect of a thriving community, as it provides
-a place for the community to contribute ideas, examples, answer
-frequently asked questions, and more. If you're looking for
-community-driven information, examples that go beyond the
-dry technical documentation, or want to contribute your own
-ideas and examples to the community, please see the wiki page.
-
-##### [View The Marionette Wiki](https://github.com/derickbailey/backbone.marionette/wiki)
-
-### Annotated Source Code
-
-In addition to this readme, I've commented the source code quite
-heavily and run it through Docco as part of my build process.
-This produces a nicely formatted, annotated source code as documenation
-file.
-
-You can read the annotated for all the detail of how Marionette works, and advice on which methods to override when.
-
-##### [View the annotated source code](http://derickbailey.github.com/backbone.marionette/docs/backbone.marionette.html)
-
 ## How To Contribute
 
 If you would like to contribute to Marionette's source code, please read
-the [guidelines for pull requests and contributions](https://github.com/derickbailey/backbone.marionette/wiki/Guidelines-for-pull-requests-and-contributions).
+the [guidelines for pull requests and contributions](https://github.com/marionettejs/backbone.marionette/wiki/Guidelines-for-pull-requests-and-contributions).
 Following these guidelines will help make your contributions easier to
 bring in to the next release.
 
 ## Help Is Just A Click Away
+
+### #Marionette on FreeNode.net IRC
+
+Join the `#marionette` channel on [FreeNode.net](http://freenode.net) to ask questions and get help.
 
 ### [Google Group Mailing List](https://groups.google.com/forum/#!forum/backbone-marionette)
 
@@ -192,7 +184,7 @@ different view types to work best with your applications needs.
 
 Questions on StackOverflow often turn in to blog posts and wiki entries.
 
-### [Github Issues](//github.com/derickbailey/backbone.marionette/issues)
+### [Github Issues](//github.com/marionettejs/backbone.marionette/issues)
 
 Report issues with Marionette, submit pull requests to fix problems, or to
 create summarized and documented feature requests (preferably with pull
@@ -221,47 +213,27 @@ libraries:
 * Underscore v1.3.3
 * jQuery v1.7.2
 
-While support for Zepto and Enderjs has been added, it is not officially
-tested against these libraries at this time.
-
 Marionette has not been tested against any other versions of these
 libraries. You may or may not have success if you use a version other
 than what it listed here.
 
-## Build Tools Used
+While support for Zepto and Enderjs has been added, it is not officially
+tested against these libraries at this time.
 
-I use a number of tools to build, test and maintain Marionette, including
-but not limited to:
-
-### Grunt
-
-The [Grunt](https://github.com/cowboy/grunt) project is used
-to generate the builds for Backbone.Marionette. You can run the
-`build` file from a Linux/OSX terminal, or the `build.cmd` file for Windows 
-users, after installing grunt with NPM / NodeJS.
-
-### Test Suite
-
-Backbone.Marionette is also tested with the Jasmine JavaScript test utility,
-using the Jasmine Ruby gem. 
-
-To get the test suite up and running, you need a Ruby installation with the 
-latest RubyGems. Install the 'bundler' gem and then run 'bundle install' from 
-the project's root folder. Then run `rake jasmine` to run the test suite, and
-load up http://localhost:8888 to see the test suite in action.
-
-### Annotated Source Code
-
-I'm using [Docco](http://jashkenas.github.com/docco/) to generate the annotated source code.
+Marionette makes use of jQuery's [Deferred](http://api.jquery.com/category/deferred-object/)
+objects and, as such, will need supported methods in replacement libraries.
+Zepto users can use @Mumakil's [Standalone-Deferred](https://github.com/Mumakil/Standalone-Deferred)
+or @sudhirj's [simply-deferred](https://github.com/sudhirj/simply-deferred).
+Enderjs users, please let us know of how you solve any compatibility issues.
 
 ## Release Notes
 
 For change logs and release notes, see the
-[changelog](https://github.com/derickbailey/backbone.marionette/blob/master/changelog.md) file.
+[changelog](https://github.com/marionettejs/backbone.marionette/blob/master/changelog.md) file.
 
 ## Legal Mumbo Jumbo (MIT License)
 
-Copyright (c) 2012 Derick Bailey, Muted Solutions, LLC
+Copyright (c) 2012 Derick Bailey; Muted Solutions, LLC
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

@@ -137,20 +137,22 @@ describe("collection view", function(){
   describe("when rendering and an 'itemViewOptions' is provided as a function", function(){
     var CollectionView = Backbone.Marionette.CollectionView.extend({
       itemView: ItemView,
-      itemViewOptions: function(){
+      itemViewOptions: function(model){
         return {
           foo: "bar"
         };
       }
     });
 
-    var collection = new Backbone.Collection([{foo: "bar"}]);
+    var collection = new Backbone.Collection([{foo: "bar"},{foo: "baz"}]);
     var collectionView, view;
+
 
     beforeEach(function(){
       collectionView = new CollectionView({
         collection: collection
       });
+      spyOn(collectionView, 'itemViewOptions').andCallThrough();
 
       collectionView.render();
       view = _.values(collectionView.children)[0];
@@ -158,6 +160,11 @@ describe("collection view", function(){
 
     it("should pass the options to every view instance", function(){
       expect(view.options.hasOwnProperty("foo")).toBe(true);
+    });
+    
+    it("should pass the model when calling 'itemViewOptions'", function() {
+      expect(collectionView.itemViewOptions).toHaveBeenCalledWith(collection.at(0)); 
+      expect(collectionView.itemViewOptions).toHaveBeenCalledWith(collection.at(1)); 
     });
   });
 
@@ -456,6 +463,7 @@ describe("collection view", function(){
     var collection;
     var childView;
     var childModel;
+    var closeHandler = jasmine.createSpy();
 
     beforeEach(function(){
 
@@ -485,6 +493,8 @@ describe("collection view", function(){
       spyOn(collectionView, "onClose").andCallThrough();
       spyOn(collectionView, "beforeClose").andCallThrough();
       spyOn(collectionView, "trigger").andCallThrough();
+      
+      collectionView.bind('collection:closed', closeHandler);
 
       collectionView.close();
 
@@ -540,6 +550,10 @@ describe("collection view", function(){
 
     it("should trigger a 'closed", function(){
       expect(collectionView.trigger).toHaveBeenCalledWith("collection:closed");
+    });
+
+    it("should call the handlers add to the closed event", function(){
+      expect(closeHandler).wasCalled();
     });
   });
 

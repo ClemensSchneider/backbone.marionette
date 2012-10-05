@@ -1,4 +1,60 @@
-### v0.9.11 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.10...v0.9.11)
+### v0.10.2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.10.1...v0.10.2)
+
+* Callbacks
+  * Fixed a bug that caused callbacks to fire multiple times after calling `reset`
+
+* Layout
+  * Fixed a bug that prevented the regions from being re-initialized correctly, when using `render` as a callback method for an event
+
+### v0.10.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.10.0...v0.10.1)
+
+* Modules
+  * Fixed a bug when defining modules in reverse order, that prevented `startWithParent` from working correctly
+
+### v0.10.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.9.13...v0.10.0)
+
+* Modules
+  * **BREAKING:** Module definition functions are executed immediately and only once, not every time you call `start`
+  * **BREAKING:** Renamed `startWithApp` to `startWithParent` in module definitions
+  * **BREAKING:** Sub-modules rely on the parent module to start them, by default, but can be started manually
+  * **BREAKING:** Sub-modules default to starting with their parent module start
+  * **BREAKING:** Specifying `startWithParent: false` for a sub-module will prevent the module from being started when the parent starts
+  * **BREAKING:** Specifying `startWithParent: false` for a top-level module will prevent the module from being started when the parent `Application` starts
+  * **BREAKING:** When starting a module, sub-modules will be started / initialized before parent modules (depth-first hierarchy traversal)
+  * **BREAKING:** When stopping a module, sub-modules will be stopped / finalized before parent modules (depth-first hierarchy traversal)
+  * Fixed: retrieving a module by name (`var foo = MyApp.module("Foo");`) will not change the module's definition or `startWithParent` setting
+
+* CollectionView
+  * Allow `itemViewOptions` to be a function, which recieves the `item` as an argument
+
+* Callbacks
+  * Added `reset` method to reset the list of callbacks and allow them to be run again, when needed
+
+### v0.9.13 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.9.12...v0.9.13)
+
+* CollectionView
+  * Fixed bug that prevented "collection:closed" event from being triggered
+  * Allow different item view to be rendered for each item in collection by overriding `getItemView` method
+
+* CompositeView
+  * Allow different item view to be rendered for each item in collection by overriding `getItemView` method
+
+* Layout
+  * Regions are initialized before prototype constructor, or `initialize` function are called
+
+* All Views
+  * Adds declarative event binding for models and collections. See [Marionette.View documentation](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.view.md) for more information.
+
+* Build and test
+  * Removed all dependencies on Ruby, in favor of NodeJS and Grunt
+
+### v0.9.12 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.9.11...v0.9.12)
+
+* Moved [Marionette.Async](https://github.com/marionettejs/backbone.marionette.async) to it's own repository
+* De-linted source code
+* Corrected throwing an "Exception" to throwing an "Error"
+
+### v0.9.11 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.9.10...v0.9.11)
 
 * JamJS Support
   * Updated the `package.json` file with more detail and support for [JamJS](http://jamjs.org/).
@@ -6,24 +62,24 @@
 * Layout
   * Fixed a global variable leak
 
-### v0.9.10 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.9...v0.9.10)
+### v0.9.10 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.9.9...v0.9.10)
 
 * ItemView and Layout
   * **BREAKING:** Removed the default implementation of `initialEvents`, so that a collection "reset" event won't cause the ItemView or Layout to re-render
 * Build Process
   * Changed from Anvil.js to Grunt.js for the build process
 
-### v0.9.9 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.8...v0.9.9)
+### v0.9.9 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.9.8...v0.9.9)
 
 * Regions
   * Added a `reset` method to regions, which closes the open view and deletes the region's cached `el`
 
-### v0.9.8 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.7...v0.9.8)
+### v0.9.8 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.9.7...v0.9.8)
 
 * Modules
   * Fixed a bug that ensures modules will start and stop the correct number of times, instead of always stopping immediately after they have been stopped once
 
-### v0.9.7 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.6...v0.9.7)
+### v0.9.7 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.9.6...v0.9.7)
 
 * Modules
   * Fixed a bug to ensure modules are only started once, no matter how many definitions the module is split in to
@@ -31,17 +87,17 @@
 * View Templates
   * Better support for pre-compiled templates - can specify a function as the `template` setting for a view, and the function will be run as the template, directly.
 
-### v0.9.6 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.5...v0.9.6)
+### v0.9.6 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.9.5...v0.9.6)
 
 * All Marionette Views
   * Fixed bug that prevented `bindTo` function and other `EventBinder` functions from being available in `initialize` method of views
 
-### v0.9.5 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.4...v0.9.5)
+### v0.9.5 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.9.4...v0.9.5)
 
 * Layout
   * Fixed a typo / bug in default Region type used for layouts
 
-### v0.9.4 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.3...v0.9.5)
+### v0.9.4 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.9.3...v0.9.5)
 
 * BindTo -> EventBindings
   * **BREAKING:** Renamed `Marionette.BindTo` to `Marionette.EventBindings` and made it a constructor function instead of an object literal
@@ -72,7 +128,7 @@
   * An already closed layout can be re-rendered, and the regions will regenerate
   * Allow a custom region type to be specified for all regions, as well as per-region instance
 
-### v0.9.3 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.2...v0.9.3)
+### v0.9.3 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.9.2...v0.9.3)
 
 * CompositeView
   * Cleaned up the method to get / cache the `itemViewContainer`
@@ -80,7 +136,7 @@
 
 * View `render` methods all return `this` in the standard Marionette views (the async views still return a deferred object).
 
-### v0.9.2 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.1...v0.9.2)
+### v0.9.2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.9.1...v0.9.2)
 
 * CompositeView
   * Added `itemViewContainer` to specify which element children / itemView instances should be appended to
@@ -95,12 +151,12 @@
 
 * Marionette can now be installed with [Volo](https://github.com/volojs/volo)
 
-### v0.9.1 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.9.0...v0.9.1)
+### v0.9.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.9.0...v0.9.1)
 
 * CollectionView and CompositeView properly close their `emptyView` instance when an item is added to the view's collection
 * CollectionView and CompositeView will show their `emptyView` after the last item has been removed from the collection
 
-### v0.9.0 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.8.4...v0.9.0)
+### v0.9.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.8.4...v0.9.0)
 
 * **BREAKING** Async Support Removed From Core Marionette
   * Marionette no longer supports asynchronous / deferred rendering in any view, by default
@@ -169,23 +225,23 @@
 * BindTo:
   * The unbinding of an event now considers the `context` parameter when unbinding, allowing multiple handers to be bound to the same event from the same object, and unbinding only one of them
 
-### v0.8.4 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.8.3...v0.8.4)
+### v0.8.4 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.8.3...v0.8.4)
 
 * Fixed: A call to `.module` will correctly pass the `Application` instance from which `.module` was called, as the second parameter of the module definition function
 
-### v0.8.3 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.8.2...v0.8.3)
+### v0.8.3 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.8.2...v0.8.3)
 
 * Module definitions can be split across multiple files and/or multiple calls to define the module
 
-### v0.8.2 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.8.1...v0.8.2)
+### v0.8.2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.8.1...v0.8.2)
 
 * Views now have the ability to define `triggers` which will convert a DOM event in to a `view.trigger` event
 
-### v0.8.1 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.8.0...v0.8.1)
+### v0.8.1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.8.0...v0.8.1)
 
 * Module definition functions will only be applied to the last module in the . chain
 
-### v0.8.0 [view commit logs](https://github.com/derickbailey/backbone.marionette/compare/v0.7.6...v0.8.0)
+### v0.8.0 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.7.6...v0.8.0)
 
 * Added modules and sub-modules through the Application object
 

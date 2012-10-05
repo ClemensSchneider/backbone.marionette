@@ -9,6 +9,56 @@ used directly. It exists as a base view for other view types
 to be extended from, and to provide a common location for
 behaviors that are shared across all views.
 
+## Binding To View Events
+
+Marionette.View extends `Marionette.BindTo`. It is recommended that you use
+the `bindTo` method to bind model, collection, or other events from Backbone
+and Marionette objects.
+
+```js
+MyView = Backbone.Marionette.ItemView.extend({
+  initialize: function(){
+    this.bindTo(this.model, "change:foo", this.modelChanged);
+    this.bindTo(this.collection, "add", this.modelAdded);
+  },
+
+  modelChanged: function(model, value){
+  },
+
+  modelAdded: function(model){
+  }
+});
+```
+
+The context (`this`) will automatically be set to the view. You can
+optionally set the context by passing in the context object as the
+4th parameter of `bindTo`.
+
+## ItemView close
+
+View implements a `close` method, which is called by the region
+managers automatically. As part of the implementation, the following
+are performed:
+
+* unbind all `bindTo` events
+* unbind all custom view events
+* unbind all DOM events
+* remove `this.el` from the DOM
+* call an `onClose` event on the view, if one is provided
+
+By providing an `onClose` event in your view definition, you can
+run custom code for your view that is fired after your view has been
+closed and cleaned up. This lets you handle any additional clean up
+code without having to override the `close` method.
+
+```js
+Backbone.Marionette.ItemView.extend({
+  onClose: function(){
+    // custom cleanup or closing code, here
+  }
+});
+```
+
 ## View.triggers
 
 Views can define a set of `triggers` as a hash, which will 
@@ -56,6 +106,36 @@ Backbone.Marionette.CompositeView.extend({
 
 Triggers work with all View types that extend from the base
 Marionette.View.
+
+## View.modelEvents and View.collectionEvents
+
+Similar to the `events` hash, views can specify a configuration
+hash for collections and models. The left side is the event on
+the model or collection, and the right side is the name of the
+method on the view.
+
+```js
+Backbone.Marionette.CompositeView.extend({
+
+  modelEvents: {
+    "change:name": "nameChanged" // equivilent to view.bindTo(view.model, "change:name", view.nameChanged, view)
+  },
+
+  collectionEvents: {
+    "add": "itemAdded" // equivilent to view.bindTo(view.collection, "add", collection.itemAdded, view)
+  },
+
+  // ... event handler methods
+  nameChanged: function(){ /* ... */ },
+  itemAdded: function(){ /* ... */ },
+
+})
+```
+
+These will use the memory safe `bindTo`, and will set the context
+(the value of `this`) in the handler to be the view. Events are
+bound at the time of instanciation, and an exception will be thrown
+if the handlers on the view do not exist.
 
 ## View.serializeData
 

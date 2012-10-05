@@ -9,10 +9,12 @@
 // Used for composite view management and sub-application areas.
 Marionette.Layout = Marionette.ItemView.extend({
   regionType: Marionette.Region,
-
+  
+  // Ensure the regions are avialable when the `initialize` method
+  // is called.
   constructor: function () {
-    Backbone.Marionette.ItemView.apply(this, arguments);
     this.initializeRegions();
+    Backbone.Marionette.ItemView.apply(this, arguments);
   },
 
   // Layout's render will use the existing region objects the
@@ -20,18 +22,16 @@ Marionette.Layout = Marionette.ItemView.extend({
   // views that the regions are showing and then reset the `el`
   // for the regions to the newly rendered DOM elements.
   render: function(){
-    var result = Marionette.ItemView.prototype.render.apply(this, arguments);
-
-    // Rewrite this function to handle re-rendering and
+    // If this is not the first render call, then we need to 
     // re-initializing the `el` for each region
-    this.render = function(){
+    if (!this._firstRender){
       this.closeRegions();
       this.reInitializeRegions();
+    } else {
+      this._firstRender = false;
+    }
 
-      var result = Marionette.ItemView.prototype.render.apply(this, arguments);
-      return result;
-    };
-
+    var result = Marionette.ItemView.prototype.render.apply(this, arguments);
     return result;
   },
 
@@ -55,17 +55,29 @@ Marionette.Layout = Marionette.ItemView.extend({
 
     var that = this;
     _.each(this.regions, function (region, name) {
-      if (    typeof region != 'string' 
-           && typeof region.selector != 'string' ) {
-        throw new Exception('Region must be specified as a selector ' +
-                            'string or an object with selector property');
+      var regionIsString = (typeof region === "string");
+      var regionSelectorIsString = (typeof region.selector === "string");
+      var regionTypeIsUndefined = (typeof region.regionType === "undefined");
+
+      if (!regionIsString && !regionSelectorIsString) {
+        throw new Error("Region must be specified as a selector string or an object with selector property");
       }
 
-      var selector = typeof region === 'string' ? region : region.selector;
-      var regionType = typeof region.regionType === 'undefined' 
-        ? that.regionType : region.regionType;
+      var selector, RegionType;
+     
+      if (regionIsString) {
+        selector = region;
+      } else {
+        selector = region.selector;
+      }
+
+      if (regionTypeIsUndefined){
+        RegionType = that.regionType;
+      } else {
+        RegionType = region.regionType;
+      }
       
-      var regionManager = new regionType({
+      var regionManager = new RegionType({
         el: selector,
           getEl: function(selector){
             return that.$(selector);

@@ -12,7 +12,7 @@ Marionette.CollectionView = Marionette.View.extend({
     this._waitingForRender = true;
   },
 
-  // Configured the initial events that the collection view 
+  // Configured the initial events that the collection view
   // binds to. Override this method to prevent the initial
   // events, or to add your own initial events.
   initialEvents: function(){
@@ -29,7 +29,7 @@ Marionette.CollectionView = Marionette.View.extend({
       return;
     }
     this.closeEmptyView();
-    var ItemView = this.getItemView();
+    var ItemView = this.getItemView(item);
     return this.addItemView(item, ItemView, options.index);
   },
 
@@ -78,8 +78,9 @@ Marionette.CollectionView = Marionette.View.extend({
   // collection view and show it
   showCollection: function(){
     var that = this;
-    var ItemView = this.getItemView();
+    var ItemView;
     this.collection.each(function(item, index){
+      ItemView = that.getItemView(item);
       that.addItemView(item, ItemView, index);
     });
   },
@@ -109,7 +110,7 @@ Marionette.CollectionView = Marionette.View.extend({
   // Retrieve the itemView type, either from `this.options.itemView`
   // or from the `itemView` in the object definition. The "options"
   // takes precedence.
-  getItemView: function(){
+  getItemView: function(item){
     var itemView = this.options.itemView || this.itemView;
 
     if (!itemView){
@@ -128,7 +129,7 @@ Marionette.CollectionView = Marionette.View.extend({
 
     var view = this.buildItemView(item, ItemView);
 
-    // Store the child view itself so we can properly 
+    // Store the child view itself so we can properly
     // remove and/or close it later
     this.storeChild(view);
     if (this.onItemAdded){ this.onItemAdded(view, index); }
@@ -151,10 +152,10 @@ Marionette.CollectionView = Marionette.View.extend({
     // them when removing / closing the child view
     this.childBindings = this.childBindings || {};
     this.childBindings[view.cid] = childBinding;
-    
+
     return renderResult;
   },
-  
+
   // render the item view
   renderItemView: function(view, index) {
     view.render();
@@ -166,9 +167,16 @@ Marionette.CollectionView = Marionette.View.extend({
     }
   },
 
-  // Build an `itemView` for every model in the collection. 
+  // Build an `itemView` for every model in the collection.
   buildItemView: function(item, ItemView){
-    var itemViewOptions = _.result(this, "itemViewOptions");
+    var itemViewOptions;
+
+    if (_.isFunction(this.itemViewOptions)){
+      itemViewOptions = this.itemViewOptions(item);
+    } else {
+      itemViewOptions = this.itemViewOptions;
+    }
+
     var options = _.extend({model: item}, itemViewOptions);
     var view = new ItemView(options);
     return view;
@@ -218,8 +226,8 @@ Marionette.CollectionView = Marionette.View.extend({
   close: function(){
     this.trigger("collection:before:close");
     this.closeChildren();
-    Marionette.View.prototype.close.apply(this, arguments);
     this.trigger("collection:closed");
+    Marionette.View.prototype.close.apply(this, arguments);
   },
 
   // Close the child views that this collection view
